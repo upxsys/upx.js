@@ -1,0 +1,26 @@
+{
+  "name": "upx.js",
+  "main": "upx.js",
+  "version": "1.0.0",
+  "description": "UPX Wrapper Library",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "UPX",
+    "Wrapper"
+  ],
+  "author": {
+    "name": "Mario Penterman",
+    "email": "mario@upxsys.com"
+  },
+  "license": "LGPL",
+  "homepage": "https://github.com/upxsys/upx.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+  ]
+}

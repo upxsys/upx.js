@@ -1,0 +1,36 @@
+{
+  "name": "upx.js",
+  "version": "1.0.0",
+  "description": "UPX Wrapper Library",
+  "main": "upx.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/upxsys/upx.js"
+  },
+  "keywords": [
+    "UPX",
+    "Wraper"
+  ],
+  "author": {
+    "name": "Mario Penterman",
+    "email": "mario@upxsys.com"
+  },
+  "license": "LGPL",
+  "bugs": {
+    "url": "https://github.com/upxsys/upx.js/issues"
+  },
+  "homepage": "https://github.com/upxsys/upx.js",
+  "scripts": {
+    "test": "grunt lint"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "time-grunt": "~0.1.1",
+    "grunt-contrib-jshint": "~0.4.3",
+    "grunt-contrib-concat": "~0.4.0",
+    "grunt-contrib-uglify": "~0.5.0"
+  }
+}
