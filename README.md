@@ -4,7 +4,6 @@ UPX Wrapper library
 
 
 ##Installation
-----------
 
 **1.** Using bower:
 ```
