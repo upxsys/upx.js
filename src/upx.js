@@ -102,205 +102,204 @@
                 auth['password'] = _password;
             }else if(_mode == 'apikey'){
                 auth['apikey'] = _apikey;
-            }else if(mode == 'hash'){
+            }else if(_mode == 'hash'){
                 auth['hash'] = _hash;
             }
 
             return auth;
         };
-    };
 
-    /*
-     * Set the server
-     * @var server The UPX server
-     * @public
-     */
-    UPX.prototype.setServer = function(server){
-        _server = server;
-    };
-
-    /*
-     * Set the account
-     * @var account The main account
-     * @public
-     */
-    UPX.prototype.setAccount = function(account){
-        _account = account;
-    };
-
-    /*
-     * Set the username and rights level to user
-     * @var user The username
-     * @public
-     */
-    UPX.prototype.setUser = function(user){
-        _user = user;
-        _subaccount = null;
-        _rights = 'user';
-    };
-
-    /*
-     * Set the subaccount and rights level to subuser
-     * @var subbacount The subbaccount
-     * @var subuser The subuser
-     * @public
-     */
-    UPX.prototype.setSubaccount = function(subaccount){
-        _subaccount = subaccount;
-        _rights = 'subuser';
-    };
-
-    /*
-     * Set the mode to anonymous
-     * @public
-     */
-    UPX.prototype.setAnonymous = function(){
-        _user = 'anonymous';
-        _rights = 'anonymous';
-        _subaccount = null;
-        _password = null;
-        _hash = null;
-        _apikey = null;
-        _mode = 'none';
-    };
-
-    /*
-     * Set the password as authentication mode
-     * @var password The password
-     * @public
-     */
-    UPX.prototype.setPassword = function(password){
-        _password = password;
-        _hash = null;
-        _apikey = null;
-        _mode = 'password';
-    };
-
-    /*
-     * Set the hash as authentication mode
-     * @var hash The hash
-     * @public
-     */
-    UPX.prototype.setHash = function(hash){
-        _hash = hash;
-        _password = null;
-        _apikey = null;
-        _mode = 'hash';
-    };
-
-    /*
-     * Set the apikey as authentication method
-     * @var apikey The apikey
-     * @public
-     */
-    UPX.prototype.setApikey = function(apikey){
-        _apikey = apikey;
-        _password = null;
-        _hash = null;
-        _mode = 'apikey';
-    };
-
-    /*
-     * Call the given method on the UPX server
-     * @var module The module which contains the method
-     * @var method The Method which needs to be executed
-     * @var parameters (optional) The parameters which needs to be passed to the method
-     * @var ajaxOptions (optional) Options which will be set on the ajax request
-     * @public
-     * @returns promise object
-     * @throws Error
-     */
-    UPX.prototype.call = function(module, method, parameters, ajaxOptions){
-        alert(_server);
-        if (typeof module === 'undefined') {
-            throw new Error('Module is a required parameter.');
-        }
-
-        if (typeof method === 'undefined') {
-            throw new Error('Method is a required parameter.');
-        }
-
-        if (_server == null) {
-            throw new Error('Server should be set.');
-        }
-
-        var url = _server + "/?action=request&api=json&module=" + module + "&instance=0&function=" + method;
-        var parameters = parameters || {};
-        var auth = _prepareAuth();
-        var ajaxOptions = ajaxOptions || {};
-
-        return $.ajax($.merge({
-            type: "POST",
-            dataType: 'json',
-            url: url,
-            timeout: 15000,
-            processData: false,
-            data: _serialize({
-                params: parameters,
-                auth: auth
-            })
-        }, ajaxOptions)).then(
-            function (response) {
-                return $.Deferred(function (deferred) {
-                    if (response.success){
-                        deferred.resolve(response.response);
-                    }else{
-                        deferred.reject(response.error)
-                    }
-                }).promise();
-            },
-            function (jqXHR, textStatus, errorThrown) {
-                return $.Deferred(function (deferred) {
-                    if (errorThrown === "timeout") {
-                        deferred.reject("timeout");
-                    } else if (jqXHR.status == 501) {
-                        deferred.reject("501");
-                    }
-                }).promise();
-            }
-        );
-    };
-
-    /*
-     * Prepares a call wrapped in a function so it can be executed later on
-     * @var call The function which contains the call
-     * @var onSuccess What to do when the call succeeds
-     * @var onError What to do when the call fails
-     * @public
-     * @returns function
-     */
-    UPX.prototype.prepareCall = function(call, onSuccess, onError){
-        onSuccess = onSuccess || function(){};
-        onError = onError || function(){};
-
-        return function(){
-            var promise = call();
-            $.when(promise).then(onSuccess, onError);
-            return promise;
+        /*
+         * Set the server
+         * @var server The UPX server
+         * @public
+         */
+        this.setServer = function(server){
+            _server = server;
         };
-    };
 
-    /*
-     * Prepares a multiple prepared calls wrapped in a function so it can be executed later on
-     * @var preparedCalls The prepared calls
-     * @var onSuccess What to do when all calls succeeds
-     * @var onError What to do when a prepared call fails
-     * @public
-     * @returns function
-     */
-    UPX.prototype.multiCall = function(preparedCalls, onSuccess, onError){
-        onSuccess = onSuccess || function(){};
-        onError = onError || function(){};
+        /*
+         * Set the account
+         * @var account The main account
+         * @public
+         */
+        this.setAccount = function(account){
+            _account = account;
+        };
 
-        return function(){
-            var promises = [];
+        /*
+         * Set the username and rights level to user
+         * @var user The username
+         * @public
+         */
+        this.setUser = function(user){
+            _user = user;
+            _subaccount = null;
+            _rights = 'user';
+        };
 
-            $.each(preparedCalls, function(){
-                promises.push(this());
-            });
+        /*
+         * Set the subaccount and rights level to subuser
+         * @var subbacount The subbaccount
+         * @var subuser The subuser
+         * @public
+         */
+        this.setSubaccount = function(subaccount){
+            _subaccount = subaccount;
+            _rights = 'subuser';
+        };
 
-            $.when.apply($, promises).then(onSuccess, onError);
-        }
+        /*
+         * Set the mode to anonymous
+         * @public
+         */
+        this.setAnonymous = function(){
+            _user = 'anonymous';
+            _rights = 'anonymous';
+            _subaccount = null;
+            _password = null;
+            _hash = null;
+            _apikey = null;
+            _mode = 'none';
+        };
+
+        /*
+         * Set the password as authentication mode
+         * @var password The password
+         * @public
+         */
+        this.setPassword = function(password){
+            _password = password;
+            _hash = null;
+            _apikey = null;
+            _mode = 'password';
+        };
+
+        /*
+         * Set the hash as authentication mode
+         * @var hash The hash
+         * @public
+         */
+        this.setHash = function(hash){
+            _hash = hash;
+            _password = null;
+            _apikey = null;
+            _mode = 'hash';
+        };
+
+        /*
+         * Set the apikey as authentication method
+         * @var apikey The apikey
+         * @public
+         */
+        this.setApikey = function(apikey){
+            _apikey = apikey;
+            _password = null;
+            _hash = null;
+            _mode = 'apikey';
+        };
+
+        /*
+         * Call the given method on the UPX server
+         * @var module The module which contains the method
+         * @var method The Method which needs to be executed
+         * @var parameters (optional) The parameters which needs to be passed to the method
+         * @var ajaxOptions (optional) Options which will be set on the ajax request
+         * @public
+         * @returns promise object
+         * @throws Error
+         */
+        this.call = function(module, method, parameters, ajaxOptions){
+            if (typeof module === 'undefined') {
+                throw new Error('Module is a required parameter.');
+            }
+
+            if (typeof method === 'undefined') {
+                throw new Error('Method is a required parameter.');
+            }
+
+            if (_server == null) {
+                throw new Error('Server should be set.');
+            }
+
+            var url = _server + "/?action=request&api=json&module=" + module + "&instance=0&function=" + method;
+            var parameters = parameters || {};
+            var auth = _prepareAuth();
+            var ajaxOptions = ajaxOptions || {};
+
+            return $.ajax($.merge({
+                type: "POST",
+                dataType: 'json',
+                url: url,
+                timeout: 15000,
+                processData: false,
+                data: _serialize({
+                    params: parameters,
+                    auth: auth
+                })
+            }, ajaxOptions)).then(
+                function (response) {
+                    return $.Deferred(function (deferred) {
+                        if (response.success){
+                            deferred.resolve(response.response);
+                        }else{
+                            deferred.reject(response.error)
+                        }
+                    }).promise();
+                },
+                function (jqXHR, textStatus, errorThrown) {
+                    return $.Deferred(function (deferred) {
+                        if (errorThrown === "timeout") {
+                            deferred.reject("timeout");
+                        } else if (jqXHR.status == 501) {
+                            deferred.reject("501");
+                        }
+                    }).promise();
+                }
+            );
+        };
+
+        /*
+         * Prepares a call wrapped in a function so it can be executed later on
+         * @var call The function which contains the call
+         * @var onSuccess What to do when the call succeeds
+         * @var onError What to do when the call fails
+         * @public
+         * @returns function
+         */
+        this.prepareCall = function(call, onSuccess, onError){
+            onSuccess = onSuccess || function(){};
+            onError = onError || function(){};
+
+            return function(){
+                var promise = call();
+                $.when(promise).then(onSuccess, onError);
+                return promise;
+            };
+        };
+
+        /*
+         * Prepares a multiple prepared calls wrapped in a function so it can be executed later on
+         * @var preparedCalls The prepared calls
+         * @var onSuccess What to do when all calls succeeds
+         * @var onError What to do when a prepared call fails
+         * @public
+         * @returns function
+         */
+        this.multiCall = function(preparedCalls, onSuccess, onError){
+            onSuccess = onSuccess || function(){};
+            onError = onError || function(){};
+
+            return function(){
+                var promises = [];
+
+                $.each(preparedCalls, function(){
+                    promises.push(this());
+                });
+
+                $.when.apply($, promises).then(onSuccess, onError);
+            }
+        };
     };
 
     return UPX;
