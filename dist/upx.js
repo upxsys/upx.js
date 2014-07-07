@@ -7,7 +7,7 @@
  * | |_| | |   / /^\ \ /\__/ / |_| \__ \ ||  __/ | | | | \__ \
  *  \___/\_|   \/   \/ \____/ \__, |___/\__\___|_| |_| |_|___/
  *                             __/ |
- *                            |___/
+ *                            |___/      
  * ============================================================
  *
  * UPX Wrapper Library v1.0.0
@@ -17,7 +17,7 @@
  * Released under the LGPL license
  * https://www.gnu.org/licenses/lgpl.html
  *
- * Date: 2014-07-03
+ * Date: 2014-07-07
  * Author: Mario Penterman
  */
 (function (root, factory) {
@@ -29,7 +29,7 @@
         root.UPX = factory(root.$);
     }
 }(this, function ($) {
-    var UPX = function () {
+    var UPX = function(){
         /*
          * Local variables
          * @private
@@ -59,7 +59,7 @@
                     v = obj[p];
                 str.push(typeof v == "object" ?
                     _serialize(v, k) :
-                    encodeURIComponent(k) + "=" + encodeURIComponent(v));
+                encodeURIComponent(k) + "=" + encodeURIComponent(v));
             }
             return str.join("&");
         };
@@ -70,39 +70,39 @@
          * @returns object
          * @throws Error
          */
-        var _prepareAuth = function () {
+        var _prepareAuth = function(){
             var auth = {};
 
-            if (_account === null) {
+            if(_account === null){
                 throw new Error('Account should be set.');
-            } else {
+            }else{
                 auth['account'] = _account;
             }
 
-            if (_mode === null) {
-                throw new Error('Password, Hash or Apikey should be set.');
-            } else {
+            if(_mode === null){
+                throw new Error('Password, Hash, Apikey or Anonymous should be set.');
+            }else{
                 auth['mode'] = _mode;
             }
 
-            if (_rights === null) {
+            if(_rights === null){
                 throw new Error('User or subuser should be set.');
-            } else {
+            }else{
                 auth['rights'] = _rights;
             }
 
-            if (_rights == 'subuser') {
+            if(_rights == 'subuser'){
                 auth['subaccount'] = _subaccount;
-                auth['subuser'] = _subuser;
-            } else {
+                auth['user'] = _user;
+            }else{
                 auth['user'] = _user;
             }
 
-            if (_mode == 'password') {
+            if(_mode == 'password'){
                 auth['password'] = _password;
-            } else if (_mode == 'apikey') {
+            }else if(_mode == 'apikey'){
                 auth['apikey'] = _apikey;
-            } else if (mode == 'hash') {
+            }else if(mode == 'hash'){
                 auth['hash'] = _hash;
             }
 
@@ -115,7 +115,7 @@
      * @var server The UPX server
      * @public
      */
-    UPX.prototype.setServer = function (server) {
+    UPX.prototype.setServer = function(server){
         _server = server;
     };
 
@@ -124,7 +124,7 @@
      * @var account The main account
      * @public
      */
-    UPX.prototype.setAccount = function (account) {
+    UPX.prototype.setAccount = function(account){
         _account = account;
     };
 
@@ -133,21 +133,35 @@
      * @var user The username
      * @public
      */
-    UPX.prototype.setUser = function (user) {
+    UPX.prototype.setUser = function(user){
         _user = user;
+        _subaccount = null;
         _rights = 'user';
     };
 
     /*
-     * Set the subaccount,subuser and rights level to subuser
+     * Set the subaccount and rights level to subuser
      * @var subbacount The subbaccount
      * @var subuser The subuser
      * @public
      */
-    UPX.prototype.setSubuser = function (subaccount, subuser) {
+    UPX.prototype.setSubaccount = function(subaccount){
         _subaccount = subaccount;
-        _subuser = subuser;
         _rights = 'subuser';
+    };
+
+    /*
+     * Set the mode to anonymous
+     * @public
+     */
+    UPX.prototype.setAnonymous = function(){
+        _user = 'anonymous';
+        _rights = 'anonymous';
+        _subaccount = null;
+        _password = null;
+        _hash = null;
+        _apikey = null;
+        _mode = 'none';
     };
 
     /*
@@ -155,8 +169,10 @@
      * @var password The password
      * @public
      */
-    UPX.prototype.setPassword = function (password) {
+    UPX.prototype.setPassword = function(password){
         _password = password;
+        _hash = null;
+        _apikey = null;
         _mode = 'password';
     };
 
@@ -165,8 +181,10 @@
      * @var hash The hash
      * @public
      */
-    UPX.prototype.setHash = function (hash) {
-        _password = hash;
+    UPX.prototype.setHash = function(hash){
+        _hash = hash;
+        _password = null;
+        _apikey = null;
         _mode = 'hash';
     };
 
@@ -175,8 +193,10 @@
      * @var apikey The apikey
      * @public
      */
-    UPX.prototype.setApikey = function (apikey) {
-        _password = apikey;
+    UPX.prototype.setApikey = function(apikey){
+        _apikey = apikey;
+        _password = null;
+        _hash = null;
         _mode = 'apikey';
     };
 
@@ -190,7 +210,7 @@
      * @returns promise object
      * @throws Error
      */
-    UPX.prototype.call = function (module, method, parameters, ajaxOptions) {
+    UPX.prototype.call = function(module, method, parameters, ajaxOptions){
         alert(_server);
         if (typeof module === 'undefined') {
             throw new Error('Module is a required parameter.');
@@ -222,9 +242,9 @@
         }, ajaxOptions)).then(
             function (response) {
                 return $.Deferred(function (deferred) {
-                    if (response.success) {
+                    if (response.success){
                         deferred.resolve(response.response);
-                    } else {
+                    }else{
                         deferred.reject(response.error)
                     }
                 }).promise();
@@ -249,11 +269,11 @@
      * @public
      * @returns function
      */
-    UPX.prototype.prepareCall = function (call, onSuccess, onError) {
-        onSuccess = onSuccess || function () {};
-        onError = onError || function () {};
+    UPX.prototype.prepareCall = function(call, onSuccess, onError){
+        onSuccess = onSuccess || function(){};
+        onError = onError || function(){};
 
-        return function () {
+        return function(){
             var promise = call();
             $.when(promise).then(onSuccess, onError);
             return promise;
@@ -268,14 +288,14 @@
      * @public
      * @returns function
      */
-    UPX.prototype.multiCall = function (preparedCalls, onSuccess, onError) {
-        onSuccess = onSuccess || function () {};
-        onError = onError || function () {};
+    UPX.prototype.multiCall = function(preparedCalls, onSuccess, onError){
+        onSuccess = onSuccess || function(){};
+        onError = onError || function(){};
 
-        return function () {
+        return function(){
             var promises = [];
 
-            $.each(preparedCalls, function () {
+            $.each(preparedCalls, function(){
                 promises.push(this());
             });
 
