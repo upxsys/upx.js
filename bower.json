@@ -1,7 +1,7 @@
 {
   "name": "upx.js",
   "main": "upx.js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "UPX Wrapper Library",
   "moduleType": [
     "amd",

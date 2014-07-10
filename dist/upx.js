@@ -10,14 +10,14 @@
  *                            |___/      
  * ============================================================
  *
- * UPX Wrapper Library v1.0.0
+ * UPX Wrapper Library v1.0.1
  * http://www.upxsys.com/
  *
  * Copyright 2014 UPX Systems
  * Released under the LGPL license
  * https://www.gnu.org/licenses/lgpl.html
  *
- * Date: 2014-07-07
+ * Date: 2014-07-10
  * Author: Mario Penterman
  */
 (function (root, factory) {
@@ -243,7 +243,7 @@
                         if (response.success){
                             deferred.resolve(response.response);
                         }else{
-                            deferred.reject(response.error)
+                            deferred.reject(response)
                         }
                     }).promise();
                 },
