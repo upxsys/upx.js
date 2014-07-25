@@ -227,7 +227,7 @@
             var auth = _prepareAuth();
             var ajaxOptions = ajaxOptions || {};
 
-            return $.ajax($.merge({
+            return $.ajax($.extend({}, {
                 type: "POST",
                 dataType: 'json',
                 url: url,
