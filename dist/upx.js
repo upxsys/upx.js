@@ -10,7 +10,7 @@
  *                            |___/      
  * ============================================================
  *
- * UPX Wrapper Library v1.0.1
+ * UPX Wrapper Library v1.0.2
  * http://www.upxsys.com/
  *
  * Copyright 2014 UPX Systems
@@ -227,7 +227,7 @@
             var auth = _prepareAuth();
             var ajaxOptions = ajaxOptions || {};
 
-            return $.ajax($.merge({
+            return $.ajax($.extend({}, {
                 type: "POST",
                 dataType: 'json',
                 url: url,
