@@ -43,7 +43,8 @@
             _apikey = null,
             _hash = null,
             _mode = null,
-            _rights = 'user';
+            _rights = 'user',
+            _xdebug = false;
 
         /*
          * Serialize the object
@@ -117,7 +118,14 @@
         this.setServer = function(server){
             _server = server;
         };
-
+        /*
+         * Set Xdebug string
+         * @var Xdebug string for starting session
+         * @public
+         */
+        this.setXDebug = function(sessionName){
+            _xdebug = sessionName;
+        };
         /*
          * Set the account
          * @var account The main account
@@ -223,6 +231,9 @@
             }
 
             var url = _server + "/?action=request&api=json&module=" + module + "&instance=0&function=" + method;
+            if( _xdebug ){
+                url += "&XDEBUG_SESSION_START="+_xdebug;
+            }
             var parameters = parameters || {};
             var auth = _prepareAuth();
             var ajaxOptions = ajaxOptions || {};
