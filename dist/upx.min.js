@@ -10,7 +10,7 @@
  *                            |___/      
  * ============================================================
  *
- * UPX Wrapper Library v1.0.2
+ * UPX Wrapper Library v1.1.0
  * http://www.upxsys.com/
  *
  * Copyright 2014 UPX Systems
