@@ -7,7 +7,7 @@
  * | |_| | |   / /^\ \ /\__/ / |_| \__ \ ||  __/ | | | | \__ \
  *  \___/\_|   \/   \/ \____/ \__, |___/\__\___|_| |_| |_|___/
  *                             __/ |
- *                            |___/      
+ *                            |___/
  * ============================================================
  *
  * UPX Wrapper Library v1.1.0
@@ -60,7 +60,7 @@
                     v = obj[p];
                 str.push(typeof v == "object" ?
                     _serialize(v, k) :
-                encodeURIComponent(k) + "=" + encodeURIComponent(v));
+                    encodeURIComponent(k) + "=" + encodeURIComponent(v));
             }
             return str.join("&");
         };
@@ -264,6 +264,8 @@
                             deferred.reject("timeout");
                         } else if (jqXHR.status == 501) {
                             deferred.reject("501");
+                        } else if (jqXHR.status == 0) {
+                            deferred.reject("no-internet");
                         }
                     }).promise();
                 }
