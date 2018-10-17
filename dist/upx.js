@@ -264,8 +264,8 @@
                             deferred.reject("timeout");
                         } else if (jqXHR.status == 501) {
                             deferred.reject("501");
-                        } else if (jqXHR.status == 0) {
-                            deferred.reject("no-internet");
+                        } else {
+                            deferred.reject( textStatus );
                         }
                     }).promise();
                 }
