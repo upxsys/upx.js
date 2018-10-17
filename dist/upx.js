@@ -264,6 +264,8 @@
                             deferred.reject("timeout");
                         } else if (jqXHR.status == 501) {
                             deferred.reject("501");
+                        } else {
+                            deferred.reject( textStatus );
                         }
                     }).promise();
                 }
